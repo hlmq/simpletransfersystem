@@ -1,0 +1,60 @@
+﻿@model SimpleBank.Web.ViewModels.AccountViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>
+    Register
+</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>Account</h4>
+        <hr />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="User.AccountNumber" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.AccountNumber" class="form-control" />
+                <span asp-validation-for="User.AccountNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="User.Password" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.Password" class="form-control" />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="User.AccountName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.AccountName" class="form-control" />
+                <span asp-validation-for="User.AccountName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="User.Balance" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.Balance" class="form-control" />
+                <span asp-validation-for="User.Balance" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Register" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

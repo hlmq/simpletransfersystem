@@ -1,0 +1,27 @@
+﻿@using System.Security.Claims
+
+@{ 
+    var isSignIn = this.Context.User.Identity.IsAuthenticated;
+    var accountName = (isSignIn) ? this.Context.User.FindFirst(ClaimTypes.GivenName).Value : string.Empty;
+}
+
+
+@if (isSignIn)
+{
+    <form asp-area="" asp-controller="Home" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="" asp-controller="Account" asp-action="Index" title="Manage">Hello @accountName!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="" asp-controller="Account" asp-action="Create">Create Account</a></li>
+    </ul>
+}

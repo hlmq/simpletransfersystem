@@ -1,0 +1,64 @@
+﻿@model SimpleBank.Web.ViewModels.TransferViewModel
+
+@{
+    ViewData["Title"] = "Transfer";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<form asp-action="Transfer">
+    <div class="form-horizontal">
+        <h4>Transfer to Account of @Model.ToUser.AccountName</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="FromUser.ID" />
+        <input type="hidden" asp-for="FromUser.Timestamp" />
+
+        <input type="hidden" asp-for="ToUser.ID" />
+        <input type="hidden" asp-for="ToUser.Timestamp" />
+
+        <div class="form-group">
+            <label asp-for="FromUser.Balance" class="col-md-2 control-label">@Model.FromUser.AccountName's Balance</label>
+            <div class="col-md-10">
+                <input asp-for="FromUser.Balance" readonly="readonly" class="form-control" />
+                <span asp-validation-for="FromUser.Balance" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TranferAmount" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TranferAmount" class="form-control" />
+                <span asp-validation-for="TranferAmount" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ToUser.AccountNumber" class="col-md-2 control-label">@Model.ToUser.AccountName's account number</label>
+            <div class="col-md-10">
+                <input asp-for="ToUser.AccountNumber" readonly="readonly" class="form-control" />
+                <span asp-validation-for="ToUser.AccountNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ToUser.Balance" class="col-md-2 control-label">@Model.ToUser.AccountName's Balance</label>
+            <div class="col-md-10">
+                <input asp-for="ToUser.Balance" readonly="readonly" class="form-control" />
+                <span asp-validation-for="ToUser.Balance" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Transfer" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,58 @@
+﻿@using System.Security.Claims
+
+@model IEnumerable<SimpleBank.Service.Entities.BankUser>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var isSignIn = this.Context.User.Identity.IsAuthenticated;
+    var loggedInUserId = (isSignIn) ? int.Parse(this.Context.User.FindFirst("UserId").Value) : 0;
+}
+
+<h2>Account List</h2>
+
+<p>
+    <a asp-action="Create">Create New Account</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Balance)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+
+                <td>
+                    <a asp-action="TransferHistory" asp-route-id="@item.ID">View Transfer History</a> |
+                    <a asp-action="Deposite" asp-route-id="@item.ID">Deposite</a> |
+                    <a asp-action="Withdraw" asp-route-id="@item.ID">Withdraw</a> |
+                    @if (isSignIn && loggedInUserId != item.ID)
+                    {
+                        <a asp-action="Transfer" asp-route-id="@item.ID">Transfer</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

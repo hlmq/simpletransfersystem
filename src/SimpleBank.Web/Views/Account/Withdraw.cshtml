@@ -1,0 +1,45 @@
+﻿@model SimpleBank.Web.ViewModels.AccountViewModel
+
+@{
+    ViewData["Title"] = "Withdraw";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<form asp-action="Withdraw">
+    <div class="form-horizontal">
+        <h4>Account</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="User.ID" />
+        <input type="hidden" asp-for="User.Timestamp" />
+
+        <div class="form-group">
+            <label asp-for="User.Balance" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="User.Balance" readonly="readonly" class="form-control" />
+                <span asp-validation-for="User.Balance" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="WithdrawAmount" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="WithdrawAmount" class="form-control" />
+                <span asp-validation-for="WithdrawAmount" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Withdraw" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
