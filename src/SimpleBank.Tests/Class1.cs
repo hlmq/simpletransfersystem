@@ -27,5 +27,4 @@ namespace SimpleBank.Tests
             return x + y;
         }
     }
-    
 }

@@ -13,18 +13,23 @@ namespace SimpleBank.Service.Entities
         }
 
         public int ID { get; set; }
+
         [Required]
         [RegularExpression(@"^[A-Za-z0-9\[\]/!$%^&*()\-_+{};:'£@#.?]*$")]
         [Display(Name = "Username")]
         public string AccountNumber { get; set; }
+
         [Required]
         [Display(Name = "Full Name")]
         public string AccountName { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
         [Required]
         [DataType(DataType.Currency)]
+        [ConcurrencyCheck]
         public decimal Balance { get; set; }
 
         [DataType(DataType.DateTime)]

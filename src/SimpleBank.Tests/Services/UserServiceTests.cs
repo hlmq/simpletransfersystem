@@ -162,77 +162,7 @@ namespace SimpleBank.Tests.Services
                 Assert.True(result.ErrorList.Any());
             }
         }
-
-        [Fact]
-        public void Transfer_with_negative_amount()
-        {
-            // Arrange
-            var user1Timestamp = BitConverter.GetBytes(DateTime.Now.Ticks);
-            var user2Timestamp = BitConverter.GetBytes(DateTime.Now.AddMilliseconds(1).Ticks);
-            var options = new DbContextOptionsBuilder<SimpleBankDbContext>()
-                .UseInMemoryDatabase(databaseName: "Transfer_with_negative_amount")
-                .Options;
-            using (var context = new SimpleBankDbContext(options))
-            {
-                var service = new UserService(context);
-
-                var user1CreatedOk = Task.Run(async () =>
-                {
-                    return await service.CreateNewUser(new BankUser
-                    {
-                        AccountNumber = "user1",
-                        AccountName = "User 1",
-                        Balance = 10000,
-                        Password = "123456",
-                        CreatedDate = DateTime.Now,
-                        Timestamp = user1Timestamp
-                    });
-                });
-
-                var isUser1CreatedSuccess = user1CreatedOk.Result;
-                Assert.True(isUser1CreatedSuccess == 1);
-                Assert.True(context.BankUsers.Single(x => x.AccountNumber == "user1") != null);
-
-                var user2CreatedOk = Task.Run(async () =>
-                {
-                    return await service.CreateNewUser(new BankUser
-                    {
-                        AccountNumber = "user2",
-                        AccountName = "User 2",
-                        Balance = 100,
-                        Password = "123456",
-                        CreatedDate = DateTime.Now,
-                        Timestamp = user2Timestamp
-                    });
-                });
-
-                var isUser2CreatedSuccess = user1CreatedOk.Result;
-                Assert.True(isUser1CreatedSuccess == 1);
-                Assert.True(context.BankUsers.Single(x => x.AccountNumber == "user2") != null);
-            }
-
-            // Act
-            using (var context = new SimpleBankDbContext(options))
-            {
-                var service = new UserService(context);
-
-                var task = Task.Run(async () =>
-                {
-                    return await service.Transfer(
-                        context.BankUsers.Single(x => x.AccountNumber == "user1").ID,
-                        context.BankUsers.Single(x => x.AccountNumber == "user2").ID,
-                        -1000,
-                        user1Timestamp,
-                        user2Timestamp
-                        );
-                });
-
-                // Assert
-                var result = task.Result;
-                Assert.True(result.ErrorList.Any());
-            }
-        }
-
+        
         [Fact]
         public void Transfer_with_exceeding_amount()
         {
