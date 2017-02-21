@@ -15,12 +15,13 @@ namespace SimpleBank.Tests.Services
     {
         private SimpleBankDbContext _context;
         private UserService _service;
+        private DbContextOptionsBuilder<SimpleBankDbContext> _dbContextBuilder;
         public UserServiceConcurrencyTests()
         {
-            var builder = new DbContextOptionsBuilder<SimpleBankDbContext>()
+            _dbContextBuilder = new DbContextOptionsBuilder<SimpleBankDbContext>()
                 .UseSqlServer($"Server=(localdb)\\mssqllocaldb;Database=SimpleBank_Testing_{Guid.NewGuid()};Trusted_Connection=True;MultipleActiveResultSets=true");
 
-            _context = new SimpleBankDbContext(builder.Options);
+            _context = new SimpleBankDbContext(_dbContextBuilder.Options);
 
             // ensure db created
             _context.Database.EnsureCreated();
@@ -34,7 +35,7 @@ namespace SimpleBank.Tests.Services
 
         /*
          * Test case: User 1 will do transfer to User 2 (in browser 1) and User 3 (in browser 2)
-         * Step 0: prepare User 1 (Balance = 10000) | User 2 (Balance = 100) | User 3 (Balance = 1000)
+         * Step 0: prepare data User 1 (Balance = 10000) | User 2 (Balance = 100) | User 3 (Balance = 1000)
          * Step 1: open browser 1 with User 1 and User 2
          * Step 2: open browser 2 with User 1 and User 3
          * Step 3: transfering in browser 1, User 1 transfer to User 2 the amount = 1000 and submit successful. Browser 1 returns to Account page
@@ -78,6 +79,17 @@ namespace SimpleBank.Tests.Services
             Assert.True(transfer1Result.ErrorList.Count == 0);
             Assert.True(transfer2Result.ErrorList.Count > 0);
             Assert.True(transfer2Result.ErrorList.Any(x => x.Value.Equals($"Current value: {(user1Balance - amount):c}")));
+            // create new dbContext to query latest data in database
+            using (var freshContext = new SimpleBankDbContext(_dbContextBuilder.Options))
+            {
+                var freshUser1 = _context.BankUsers.AsNoTracking().SingleOrDefault(x => x.AccountNumber == "user1");
+                var freshUser2 = _context.BankUsers.AsNoTracking().SingleOrDefault(x => x.AccountNumber == "user2");
+                var freshUser3 = _context.BankUsers.AsNoTracking().SingleOrDefault(x => x.AccountNumber == "user3");
+                Assert.Equal(freshUser1.Balance, 9000);
+                Assert.Equal(freshUser2.Balance, 1100);
+                Assert.Equal(freshUser3.Balance, 1000);
+            }
+
         }
 
         #region private methods
